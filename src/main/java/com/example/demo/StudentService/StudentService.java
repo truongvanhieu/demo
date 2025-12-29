@@ -14,11 +14,23 @@ public class StudentService {
     @Autowired
     private StudentRepository repository;
 
-    public List<Student> getAllStudents() {
+    public Student addStudent(Student student) {
+        return repository.save(student);
+    }
+
+    public void deleteStudent(int id) {
+        repository.deleteById(id);
+    }
+
+    public List<Student> findByName(String name){
+        return repository.findByNameContainingIgnoreCase(name);
+    }
+
+    public List<Student> getAll(){
         return repository.findAll();
     }
 
-    public Student getStudentById(int id) {
+    public Student getStudentById(int id){
         return repository.findById(id).orElse(null);
     }
 }
