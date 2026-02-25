@@ -1,37 +1,32 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import java.util.UUID;
+
+import org.hibernate.annotations.UuidGenerator;
+
+import jakarta.persistence.*;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "permissions")
 public class Permission {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @UuidGenerator   // Hibernate 6+
+    @Column(columnDefinition = "UNIQUEIDENTIFIER",
+            updatable = false,
+            nullable = false)
+    private UUID id;
 
     private String code;
     private String description;
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
+
+    public UUID getId() { return id; }
+    public void setId(UUID id) { this.id = id; }
+
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
+
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 }

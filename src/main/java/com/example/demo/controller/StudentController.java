@@ -1,66 +1,68 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.StudentService.StudentService;
 import com.example.demo.model.Student;
+import com.example.demo.service.StudentService;
 
 @RestController
 @RequestMapping("/api/students")
 @CrossOrigin // cho phép frontend gọi
 public class StudentController {
 
-    @Autowired
-    private StudentService service;
+    private final StudentService service;
 
-    //1. API thêm sinh viên
-    @PostMapping
-    public Student addStudent(Student student) {
-        return service.addStudent(student);
-    }
-    //2. API xóa sinh viên
-    @PostMapping("/delete/{id}")
-    public String deleteStudent(@PathVariable int id) {
-        service.deleteStudent(id);
-        return "Student with ID " + id + " has been deleted.";
-    }
-    //3. Tim kiếm sinh viên theo tên
-    @GetMapping("/search")
-    public List<Student> searchByName(@RequestParam String name) {
-        return service.findByName(name);
+    public StudentController(StudentService service) {
+        this.service = service;
     }
 
-    //4. API lấy sinh viên theo ID
-    @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable int id) {
-        return service.getStudentById(id);
-    }
-
-    //5. API lấy danh sách sinh viên
+    // GET ALL
     @GetMapping
-    public List<Student> getAllStudents() {
+    public List<Student> getAll() {
         return service.getAll();
     }
-    
-    //6. API cập nhật sinh viên
-    @PostMapping("/update/{id}")
-    public Student updateStudent(@PathVariable int id, @RequestParam String name, @RequestParam String email) {
-        Student existingStudent = service.getStudentById(id);
-        if (existingStudent != null) {
-            existingStudent.setName(name);
-            existingStudent.setEmail(email);
-            return service.addStudent(existingStudent);
-        }
-        return null;
+
+    // GET BY ID
+    @GetMapping("/{id}")
+    public Student getById(@PathVariable UUID id) {
+        return service.getById(id);
+    }
+
+    // CREATE
+    @PostMapping
+    public Student create(@RequestBody Student student) {
+        return service.create(student);
+    }
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public Student update(@PathVariable UUID id,
+                          @RequestBody Student student) {
+        return service.update(id, student);
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable UUID id) {
+        service.delete(id);
+    }
+
+    // SEARCH BY NAME
+    @GetMapping("/search")
+    public List<Student> search(@RequestParam String name) {
+        return service.search(name);
     }
 
 }

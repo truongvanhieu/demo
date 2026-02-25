@@ -1,8 +1,8 @@
-package com.example.demo.StudentService;
+package com.example.demo.service;
 
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.Permission;
@@ -11,8 +11,11 @@ import com.example.demo.repository.PermissionRepository;
 @Service
 public class PermissionService {
 
-    @Autowired
-    private PermissionRepository permissionRepo;
+    private final PermissionRepository permissionRepo;
+
+    public PermissionService(PermissionRepository permissionRepo) {
+        this.permissionRepo = permissionRepo;
+    }
 
     /**
      * Tạo permission mới
@@ -31,7 +34,7 @@ public class PermissionService {
     /**
      * Tìm permission theo id
      */
-    public Permission findById(Long id) {
+    public Permission findById(UUID id) {
         return permissionRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Permission not found"));
     }
@@ -39,7 +42,7 @@ public class PermissionService {
     /**
      * Xóa permission
      */
-    public void delete(Long id) {
+    public void delete(UUID id) {
         permissionRepo.deleteById(id);
     }
 }

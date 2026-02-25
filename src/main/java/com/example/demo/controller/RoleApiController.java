@@ -1,13 +1,14 @@
 package com.example.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.UUID;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.StudentService.RoleService;
 import com.example.demo.model.Role;
+import com.example.demo.service.RoleService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -15,8 +16,11 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 @RequestMapping("/api/roles")
 public class RoleApiController {
 
-    @Autowired
-    private RoleService roleService;
+    private final RoleService roleService;
+
+    public RoleApiController(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @PostMapping
     public Role create(@RequestBody Role role) {
@@ -24,8 +28,8 @@ public class RoleApiController {
     }
 
     @PostMapping("/{roleId}/permissions/{permId}")
-    public Role addPermission(@PathVariable Long roleId,
-                              @PathVariable Long permId) {
+    public Role addPermission(@PathVariable UUID roleId,
+                              @PathVariable UUID permId) {
         return roleService.addPermission(roleId, permId);
     }
 }
